@@ -6,7 +6,7 @@ from time import sleep
 from tqdm import tqdm
 
 from strings import PLOTS_URL
-from utils import fetch
+from utils import fetch, threshold
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
@@ -48,10 +48,10 @@ parser = PlotParser()
 
 with open('data/movie_list.json', encoding='utf-8') as f:
     movies = json.load(f)
-    for i, movie in tqdm(enumerate(movies), total=2400):
+    for i, movie in tqdm(enumerate(movies), total=threshold):
         plots = parser.parse(fetch(str.format(PLOTS_URL, movie['id'])))
         with open('data/plots/%s.json' % movie['id'], 'w', encoding='utf-8') as g:
             json.dump(plots, g)
         sleep(4)
-        if i > 2400:
+        if i > threshold:
             break

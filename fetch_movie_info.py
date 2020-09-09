@@ -54,12 +54,18 @@ result = []
 with open('data/movie_list.json', encoding='utf-8') as f:
     movies = json.load(f)
     for i, movie in tqdm(enumerate(movies), total=threshold + 1):
-        info = parser.parse(fetch(str.format(MOVIE_BASE_URL, movie['id'])))
-        info['id'] = movie['id']
-        result.append(info)
-        sleep(2)
-        if i > threshold:
-            break
+        try:
+            info = parser.parse(fetch(str.format(MOVIE_BASE_URL, movie['id'])))
+            info['id'] = movie['id']
+            result.append(info)
+            sleep(2)
+            if i > 0 and i % 400 == 0:
+                with open('raw/info/checkpoint_%d.json' % i, 'w', encoding='utf-8') as g:
+                    json.dump(result, g, ensure_ascii=False)
+            if i > threshold:
+                break
+        except Exception as e:
+            logging.error(e)
 
 with open('data/movie_info.json', 'w', encoding='utf-8') as f:
     json.dump(result, f)

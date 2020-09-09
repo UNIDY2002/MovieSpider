@@ -124,27 +124,31 @@ result = []
 with open('data/people_list.txt', encoding='utf-8') as f:
     lines = f.readlines()
     for i, line in tqdm(enumerate(lines), total=len(lines)):
-        person = line.strip()
-        name, photo, constellation, height, weight, birthday, birth_place = \
-            person_parser.parse(fetch(str.format(PEOPLE_URL, person)))
-        sleep(1)
-        biography = biography_parser.parse(fetch(str.format(BIOGRAPHY_URL, person)))
-        if len(biography) > 0:
-            has_biography += 1
-        sleep(1)
-        result.append({
-            'name': name,
-            'photo': photo,
-            'constellation': constellation,
-            'height': height,
-            'weight': weight,
-            'birthday': birthday,
-            'birth_place': birth_place,
-            'biography': biography,
-        })
-        if i > 0 and i % 400 == 0:
-            with open('raw/actors/checkpoint_%d.json' % i, 'w', encoding='utf-8') as g:
-                json.dump(result, g, ensure_ascii=False)
+        try:
+            person = line.strip()
+            name, photo, constellation, height, weight, birthday, birth_place = \
+                person_parser.parse(fetch(str.format(PEOPLE_URL, person)))
+            sleep(1)
+            biography = biography_parser.parse(fetch(str.format(BIOGRAPHY_URL, person)))
+            if len(biography) > 0:
+                has_biography += 1
+            sleep(1)
+            result.append({
+                'name': name,
+                'photo': photo,
+                'constellation': constellation,
+                'height': height,
+                'weight': weight,
+                'birthday': birthday,
+                'birth_place': birth_place,
+                'biography': biography,
+            })
+            if i > 0 and i % 400 == 0:
+                with open('raw/actors/checkpoint_%d.json' % i, 'w', encoding='utf-8') as g:
+                    json.dump(result, g, ensure_ascii=False)
+                logging.info('Up till now, %d out of %d actors have biography.' % (has_biography, i))
+        except Exception as e:
+            logging.error(e)
             logging.info('Up till now, %d out of %d actors have biography.' % (has_biography, i))
 
 logging.info('A sum of %d actors have biography.' % has_biography)

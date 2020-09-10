@@ -134,6 +134,7 @@ with open('data/people_list.txt', encoding='utf-8') as f:
                 has_biography += 1
             sleep(1)
             result.append({
+                'id': person,
                 'name': name,
                 'photo': photo,
                 'constellation': constellation,

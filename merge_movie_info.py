@@ -18,6 +18,10 @@ with open('data/movie_list.json', encoding='utf-8') as f:
         movie.pop('actorName2')
         if 'img' in movie and movie['img'] is not None:
             movie['img'] = movie['img'] if movie['img'].startswith('http') else 'https:' + movie['img']
+        if movie['img'] is None:
+            movie['img'] = ''
+        if movie['rating'] is None:
+            movie['rating'] = ''
         movie['genre'] = '|'.join(x.split('|')[1] for x in movie['genre'].split(';')) if movie['genre'] != '' else ''
         movie_dict[movie['id']] = movie
 
@@ -60,7 +64,9 @@ with open('data/short.json', encoding='utf-8') as f:
             reviews.extend(movie['reviews'] if 'reviews' in movie else [])
             movie['reviews'] = reviews
 
-result = [movie_dict[x] for x in movie_dict]
+result = [p for p in (movie_dict[x] for x in movie_dict) if 'actors' in p]
+
+logging.info('A sum of %s movies are loaded.' % len(result))
 
 with open('data/movie_merged.json', 'w', encoding='utf-8') as f:
     json.dump(result, f, ensure_ascii=False)

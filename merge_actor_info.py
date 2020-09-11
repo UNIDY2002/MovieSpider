@@ -29,6 +29,6 @@ with open('data/actor_info.json', encoding='utf-8') as f:
         actor['collaborators'] = dense_graph[actor['id']]
 
 with open('data/actor_merged.json', 'w', encoding='utf-8') as g:
-    json.dump(actors, g)
+    json.dump(actors, g, ensure_ascii=False)
 
 logging.info('Finally, information about %d actors are saved.' % len(actors))

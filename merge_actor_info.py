@@ -3,15 +3,9 @@ import logging
 
 from tqdm import tqdm
 
+from actor_mapping import actor_map
+
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
-
-actor_map = {}
-
-with open('data/people_list.txt', encoding='utf-8') as f:
-    for person in f:
-        actor = person.strip()
-        if actor not in actor_map:
-            actor_map[actor] = len(actor_map)
 
 collaboration_graph = [[0] * len(actor_map) for _ in range(len(actor_map))]
 

@@ -9,6 +9,6 @@ python3 generate_people_list.py
 python3 fetch_people.py
 python3 transform_short.py
 python3 fetch_movie_info.py
-python3 mapping.py
 python3 merge_actor_info.py
+python3 merge_movie_info.py
 ```
